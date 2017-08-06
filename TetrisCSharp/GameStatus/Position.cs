@@ -3,8 +3,8 @@ namespace TetrisCSharp.GameStatus
 {
     public struct Position
     {
-        public byte row {get; set;}
-        public byte column {get; set;}
+        public byte row {get; }
+        public byte column {get; }
 
         public Position(byte row, byte column)
         {

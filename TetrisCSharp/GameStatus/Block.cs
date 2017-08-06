@@ -3,11 +3,11 @@ namespace TetrisCSharp.GameStatus
 {
     public struct Block
     {
-        public TetrisPieceEnum procedence { get; private set; }
+        public TetrisPieceEnum type { get;  }
 
         public Block(TetrisPieceEnum procedence)
         {
-            this.procedence = procedence;
+            this.type = procedence;
         }
     }
 }
