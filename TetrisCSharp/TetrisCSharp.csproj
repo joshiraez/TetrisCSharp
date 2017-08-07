@@ -51,6 +51,7 @@
     <Compile Include="GameStatus\GameStatus.cs" />
     <Compile Include="GameStatus\Position.cs" />
     <Compile Include="GameStatus\TetrisPieces\TetrisPiece.cs" />
+    <Compile Include="GameStatus\TetrisPieces\TetrisPieceRotationData.cs" />
     <Compile Include="GameStatus\TetrisPieces\TetrisPieceEnum.cs" />
     <Compile Include="Input\Implementation\KeyboardController.cs" />
     <Compile Include="Input\Interface\ITetrisControl.cs" />

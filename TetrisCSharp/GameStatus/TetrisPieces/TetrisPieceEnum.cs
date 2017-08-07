@@ -4,13 +4,13 @@ namespace TetrisCSharp.GameStatus.TetrisPieces
     public enum TetrisPieceEnum : byte
     {
         EMPTY = 0,
-        SQUARE = 1,
-        L_UPSIDE = 2,
-        L_DOWNSIDE = 3,
+        O = 1,
+        J = 2,
+        L = 3,
         T = 4,
-        LINE = 5,
-        S_RIGHTSIDE = 6,
-        S_LEFTSIDE = 7,
+        I = 5,
+        S = 6,
+        Z = 7,
         GARBAGE = 8
     }
 
