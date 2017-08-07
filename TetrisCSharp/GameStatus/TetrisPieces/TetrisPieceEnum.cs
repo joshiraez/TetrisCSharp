@@ -1,5 +1,5 @@
 ﻿
-namespace TetrisCSharp.GameStatus
+namespace TetrisCSharp.GameStatus.TetrisPieces
 {
     public enum TetrisPieceEnum : byte
     {

@@ -1,4 +1,5 @@
-﻿
+﻿using TetrisCSharp.GameStatus.TetrisPieces;
+
 namespace TetrisCSharp.GameStatus
 {
     public class GameStatus

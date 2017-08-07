@@ -50,8 +50,8 @@
     <Compile Include="GameStatus\GameBoard.cs" />
     <Compile Include="GameStatus\GameStatus.cs" />
     <Compile Include="GameStatus\Position.cs" />
-    <Compile Include="GameStatus\TetrisPiece.cs" />
-    <Compile Include="GameStatus\TetrisPieceEnum.cs" />
+    <Compile Include="GameStatus\TetrisPieces\TetrisPiece.cs" />
+    <Compile Include="GameStatus\TetrisPieces\TetrisPieceEnum.cs" />
     <Compile Include="Input\Implementation\KeyboardController.cs" />
     <Compile Include="Input\Interface\ITetrisControl.cs" />
     <Compile Include="Program.cs" />

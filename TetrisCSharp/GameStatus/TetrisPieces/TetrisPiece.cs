@@ -1,13 +1,19 @@
-﻿namespace TetrisCSharp.GameStatus
+﻿namespace TetrisCSharp.GameStatus.TetrisPieces
 {
-    abstract class TetrisPiece
+    abstract public class TetrisPiece
     {
-        Position[][] rotations { get; }
+        Position[][] rotations;
         byte rotation;
+        TetrisPieceEnum type;
 
         private byte getNextRotation()
         {
             return (byte)((rotation + 1) % rotations.Length);
+        }
+
+        public Position[] getCurrentRotation()
+        {
+            return rotations[rotation];
         }
 
         public Position[] peekNextRotation()
