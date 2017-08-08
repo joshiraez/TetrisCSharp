@@ -7,6 +7,7 @@ namespace TetrisCSharp.GameStatus
         private const byte ROW_SIZE = 20;
         private const byte COL_SIZE = 10;     
         public Block[,] board { get; }
+        public static readonly Position spawn = new Position(0, 4);
 
         public GameBoard()
         {

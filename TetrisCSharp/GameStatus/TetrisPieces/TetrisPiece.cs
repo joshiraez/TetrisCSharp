@@ -6,7 +6,7 @@
         byte rotation;
         public TetrisPieceEnum type { get;  }
 
-        protected TetrisPiece(TetrisPieceEnum type)
+        public TetrisPiece(TetrisPieceEnum type)
         {
             rotation = 0;
         }
