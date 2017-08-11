@@ -24,7 +24,7 @@
 
         public Position[] peekNextRotation()
         {
-            return rotations[getNextRotation()] as Position[]; 
+            return rotations[getNextRotation()].Clone() as Position[]; 
         }
 
         public void doNextRotation()

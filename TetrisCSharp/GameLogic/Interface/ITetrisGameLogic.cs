@@ -7,6 +7,6 @@ namespace TetrisCSharp.GameLogic.Interface
     {
         void Start(Game game);
         void Update(Game game, ITetrisControl controller);
-        bool HasFinished();
+        bool HasFinished(Game game);
     }
 }

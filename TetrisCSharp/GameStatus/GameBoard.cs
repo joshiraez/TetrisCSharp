@@ -4,10 +4,11 @@ namespace TetrisCSharp.GameStatus
 {
     public class GameBoard
     {
+        public static readonly Position SPAWN = new Position(0, 4);
         private const byte ROW_SIZE = 20;
         private const byte COL_SIZE = 10;
         private Block[][] board;
-        public static readonly Position spawn = new Position(0, 4);
+        
 
         public GameBoard()
         {
@@ -91,6 +92,11 @@ namespace TetrisCSharp.GameStatus
             }
 
             this.addRow(new Block[COL_SIZE], rowIterator);
+        }
+
+        public Position getSpawn()
+        {
+            return SPAWN;
         }
     }
 }

@@ -197,7 +197,7 @@ namespace TetrisCSharp.GameStatus.TetrisPieces
         
         public static Position[][] getRotations(this TetrisPieceEnum type)
         {
-            Position[][] res = null;
+            Position[][] res = new Position[][] { new Position[] { } };
 
             if (positionDiccionary.ContainsKey(type))
             {
