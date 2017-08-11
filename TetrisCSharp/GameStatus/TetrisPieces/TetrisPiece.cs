@@ -18,12 +18,13 @@
 
         public Position[] getCurrentRotation()
         {
-            return rotations[rotation];
+            //Returning a clone makes us be able to work directly with the function result
+            return rotations[rotation].Clone() as Position[];
         }
 
         public Position[] peekNextRotation()
         {
-            return rotations[getNextRotation()];
+            return rotations[getNextRotation()] as Position[]; 
         }
 
         public void doNextRotation()

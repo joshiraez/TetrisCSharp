@@ -2,7 +2,7 @@
 
 namespace TetrisCSharp.GameStatus
 {
-    public class GameStatus
+    public class Game
     {
 
         public GameBoard board { get; } 
@@ -12,7 +12,7 @@ namespace TetrisCSharp.GameStatus
         public byte level { get; set; }
         public byte toNextLevel { get; set; }
 
-        public GameStatus()
+        public Game()
         {
             board = new GameBoard();
             movingPiece = new ActivePiece(TetrisPieceEnum.EMPTY, new Position(0,0));

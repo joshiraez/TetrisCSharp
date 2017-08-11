@@ -45,10 +45,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameLogic\Interface\ITetrisGameLogic.cs" />
     <Compile Include="GameStatus\ActivePiece.cs" />
     <Compile Include="GameStatus\Block.cs" />
     <Compile Include="GameStatus\GameBoard.cs" />
-    <Compile Include="GameStatus\GameStatus.cs" />
+    <Compile Include="GameStatus\Game.cs" />
     <Compile Include="GameStatus\Position.cs" />
     <Compile Include="GameStatus\TetrisPieces\TetrisPiece.cs" />
     <Compile Include="GameStatus\TetrisPieces\TetrisPieceRotationData.cs" />
@@ -65,7 +66,7 @@
     <Content Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GameLogic\" />
+    <Folder Include="GameLogic\Implementation\" />
     <Folder Include="Output\" />
     <Folder Include="Render\" />
   </ItemGroup>

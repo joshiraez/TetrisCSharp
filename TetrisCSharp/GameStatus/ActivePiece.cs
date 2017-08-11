@@ -21,20 +21,12 @@ namespace TetrisCSharp.GameStatus
 
         public Position[] getBlockPositions()
         {
-            return piece.getCurrentRotation();
+            return sumToPositionArray(piece.getCurrentRotation(), position);
         }
 
-        public Position[] getBlockPositions(Position afterMovingTo)
+        public Position[] getBlockPositions(Position afterMoving)
         {
-            Position[] currentPosition = getBlockPositions();
-            Position[] result = new Position[currentPosition.Length];
-
-            for (int i = 0; i<result.Length; i++)
-            {
-                result[i] = afterMovingTo + currentPosition[i];
-            }
-
-            return result;
+            return sumToPositionArray(piece.getCurrentRotation(), position + afterMoving);
         }
 
         public void move(Position move)
@@ -42,27 +34,30 @@ namespace TetrisCSharp.GameStatus
             position += move;
         }
 
+
         public Position[] peekNextRotationBlockPosition()
         {
-            return piece.peekNextRotation();
+            return sumToPositionArray(piece.peekNextRotation(), position);
         }
-
+        
         public Position[] peekNextRotationBlockPosition(Position afterMovingTo)
         {
-            Position[] currentPosition = peekNextRotationBlockPosition();
-            Position[] result = new Position[currentPosition.Length];
-
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = afterMovingTo + currentPosition[i];
-            }
-
-            return result;
+            return sumToPositionArray(piece.peekNextRotation(), position+afterMovingTo);
         }
 
         public void rotate()
         {
             piece.doNextRotation();
+        }
+
+        private Position[] sumToPositionArray(Position[] currentPosition, Position placement)
+        {
+            for (int i = 0; i < currentPosition.Length; i++)
+            {
+                currentPosition[i] = placement + currentPosition[i];
+            }
+
+            return currentPosition;
         }
     }
 }
