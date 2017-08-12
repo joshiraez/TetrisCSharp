@@ -36,18 +36,46 @@ namespace TetrisCSharp.GameLogic.Implementation
 
         public void Update(Game game, ITetrisControl controller)
         {
-            //todo
-            /*
-            checkController
-                doController
-            else checkTime
-            if FInished
-                checkLines
-                spawnNewPiece
-                getNewRandomNext
-            */
+            bool piecePlaced;
+            
+            if (controller.isFirePressed())
+            {
+                rotatePiece(game);
+            }
 
-            throw new NotImplementedException();
+            if (controller.isRightPressed())
+            {
+                move(game, Position.right);
+            }
+            if (controller.isLeftPressed())
+            {
+                move(game, Position.left);
+            }
+
+            if (controller.isUpPressed())
+            {
+                instafall(game);
+                piecePlaced = true;
+            }
+            else
+            {
+                if (controller.isDownPressed())
+                {
+                    dropSpace(game, piecePlaced);
+                    
+                }
+                else
+                {
+                    checkDropTime(game, piecePlaced);
+                }
+            }
+
+            if (piecePlaced)
+            {
+                checkLines();
+                spawnNewPiece();
+            }
+
         }
 
         private void initializeGame(Game game)
@@ -68,6 +96,60 @@ namespace TetrisCSharp.GameLogic.Implementation
         private TetrisPieceEnum randomPieceGenerator()
         {
             return (TetrisPieceEnum)rng.Next(1, 7);
+        }
+
+        private void rotatePiece(Game game)
+        {
+            Position[] wallkickingStrategy =
+            {
+                new Position(0,0),
+                new Position(0,1),
+                new Position(0,-1),
+                new Position(0,2),
+                new Position(0,-2)
+            };
+
+            byte wallKickingTry = 0;
+
+            Position[] peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(wallkickingStrategy[wallKickingTry]);
+
+            while (!checkIfItsValidPosition(game, peekRotationBlocks) && wallKickingTry<wallkickingStrategy.Length)
+            {
+                wallKickingTry++;
+                peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(wallkickingStrategy[wallKickingTry]);
+            }
+
+            if (wallKickingTry < wallkickingStrategy.Length)
+            {
+                game.movingPiece.move(wallkickingStrategy[wallKickingTry]);
+                game.movingPiece.rotate();
+            }
+           
+            
+        }
+
+        private void move(Game game, Position moveDirection)
+        {
+            Position[] peekMoveBlocks = game.movingPiece.getBlockPositions(moveDirection);
+
+            if(checkIfItsValidPosition(game, peekMoveBlocks){
+                game.movingPiece.move(moveDirection);
+            }
+        }
+
+
+
+        private bool checkIfItsValidPosition(Game game, Position[] blockPositions)
+        {
+            for(int block=0; block<blockPositions.Length; block++)
+            {
+                if (!game.board.isBlockFree(blockPositions[block]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
