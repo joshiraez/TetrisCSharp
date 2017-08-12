@@ -13,7 +13,8 @@ namespace TetrisCSharp.GameLogic.Implementation
         private static readonly byte[] DEFAULT_LINES_FOR_LEVEL = { 0, 5, 10, 20, 40, 60, 80, 100, 120, 140, 160 };
         private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 40, 100, 300, 1200 };
         private const int SCORE_FOR_DROP = 1;
-
+        private DateTime lastUpdateTime;
+        private TimeSpan timeFromLastDrop;
 
         public BasicTetrisLogic()
         {
@@ -30,11 +31,22 @@ namespace TetrisCSharp.GameLogic.Implementation
         {
             game = new Game();
             initializeGame(game);
+            initializeTime();
         }
 
         public void Update(Game game, ITetrisControl controller)
         {
             //todo
+            /*
+            checkController
+                doController
+            else checkTime
+            if FInished
+                checkLines
+                spawnNewPiece
+                getNewRandomNext
+            */
+
             throw new NotImplementedException();
         }
 
@@ -45,6 +57,12 @@ namespace TetrisCSharp.GameLogic.Implementation
             game.score = 0;
             game.level = 1;
             game.toNextLevel = DEFAULT_LINES_FOR_LEVEL[game.level];
+        }
+        
+        private void initializeTime()
+        {
+            lastUpdateTime = DateTime.Now;
+            timeFromLastDrop = TimeSpan.Zero;
         }
 
         private TetrisPieceEnum randomPieceGenerator()
