@@ -2,7 +2,8 @@
 
 namespace TetrisCSharp.GameStatus.TetrisPieces
 {
-    //0,0 is the pivot point. x positive to the right. y positive down
+    //0,0 is the pivot point (piece position in world). x positive to the right. y positive down
+    //Could be improved by using Sega Rotation values (the values used by Arika ) so all pieces are flatten up, and changing pivot point.
 
     public static class TetrisPieceRotationData
     {
