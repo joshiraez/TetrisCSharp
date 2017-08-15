@@ -21,5 +21,10 @@ namespace TetrisCSharp.GameStatus
         {
             return new Position((short)(p1.row + p2.row), (short)(p1.column + p2.column));
         }
+
+        public static Position operator *(Position p1, int scale)
+        {
+            return new Position((short)(p1.row *scale), (short)(p1.column *scale));
+        }
     }
 }

@@ -24,7 +24,14 @@ namespace TetrisCSharp.GameStatus
 
         public bool isBlockFree(Position pos)
         {
-            return board[pos.row][pos.column].type == TetrisPieceEnum.EMPTY;
+            //We don't care about something going over the board (there is no ceil), so if one piece wants to be over it, it can.
+            if (pos.row < ROW_SIZE && pos.column >= 0 && pos.column < COL_SIZE)
+            {
+                return board[pos.row][pos.column].type == TetrisPieceEnum.EMPTY;
+            }else
+            {
+                return false;
+            }
         }
 
         public void setBlock(Position pos, TetrisPieceEnum type)

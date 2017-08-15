@@ -13,6 +13,7 @@ namespace TetrisCSharp.GameLogic.Implementation
         private static readonly byte[] DEFAULT_LINES_FOR_LEVEL = { 0, 5, 10, 20, 40, 60, 80, 100, 120, 140, 160 };
         private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 40, 100, 300, 1200 };
         private const int SCORE_FOR_DROP = 1;
+        private const int MULTIPLIER_SCORE_FOR_INSTAFALL = 2;
         private DateTime lastUpdateTime;
         private TimeSpan timeFromLastDrop;
 
@@ -36,7 +37,7 @@ namespace TetrisCSharp.GameLogic.Implementation
 
         public void Update(Game game, ITetrisControl controller)
         {
-            bool piecePlaced;
+            bool pieceLanded;
             
             if (controller.isFirePressed())
             {
@@ -55,23 +56,24 @@ namespace TetrisCSharp.GameLogic.Implementation
             if (controller.isUpPressed())
             {
                 instafall(game);
-                piecePlaced = true;
+                pieceLanded = true;
             }
             else
             {
                 if (controller.isDownPressed())
                 {
-                    dropSpace(game, piecePlaced);
+                    pieceLanded=dropSpace(game);
                     
                 }
                 else
                 {
-                    checkDropTime(game, piecePlaced);
+                    pieceLanded=checkDropTime(game);
                 }
             }
 
-            if (piecePlaced)
+            if (pieceLanded)
             {
+                placePiece();
                 checkLines();
                 spawnNewPiece();
             }
@@ -103,45 +105,69 @@ namespace TetrisCSharp.GameLogic.Implementation
             Position[] wallkickingStrategy =
             {
                 new Position(0,0),
-                new Position(0,1),
-                new Position(0,-1),
-                new Position(0,2),
-                new Position(0,-2)
+                Position.right,
+                Position.left,
+                Position.right*2,
+                Position.left*2
             };
 
             byte wallKickingTry = 0;
 
-            Position[] peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(wallkickingStrategy[wallKickingTry]);
-
-            while (!checkIfItsValidPosition(game, peekRotationBlocks) && wallKickingTry<wallkickingStrategy.Length)
+            while (!willBeCollisionAfterRotation(game, wallkickingStrategy[wallKickingTry]) && wallKickingTry<wallkickingStrategy.Length)
             {
                 wallKickingTry++;
-                peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(wallkickingStrategy[wallKickingTry]);
             }
 
             if (wallKickingTry < wallkickingStrategy.Length)
             {
                 game.movingPiece.move(wallkickingStrategy[wallKickingTry]);
                 game.movingPiece.rotate();
-            }
-           
-            
+            }              
         }
 
         private void move(Game game, Position moveDirection)
         {
             Position[] peekMoveBlocks = game.movingPiece.getBlockPositions(moveDirection);
 
-            if(checkIfItsValidPosition(game, peekMoveBlocks){
+            if(checkIfItsValidPosition(game, peekMoveBlocks)){
                 game.movingPiece.move(moveDirection);
             }
         }
 
+        private void instafall(Game game)
+        {
+            while (!dropSpace(game)){}
+        }
 
+        private bool dropSpace(Game game)
+        {
+            bool pieceLanded;
+
+            pieceLanded = willBeCollision(game, Position.down);
+
+            if (!pieceLanded)
+            {
+                game.movingPiece.move(Position.down);
+            }
+
+            return pieceLanded;
+        }
+
+        private bool willBeCollisionAfterRotation(Game game, Position afterMoving)
+        {
+            Position[] peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(afterMoving);
+            return checkIfItsValidPosition(game, peekRotationBlocks);
+        }
+
+        private bool willBeCollision(Game game, Position afterMoving)
+        {
+            Position[] peekBlocks = game.movingPiece.getBlockPositions(afterMoving);
+            return checkIfItsValidPosition(game, peekBlocks);
+        }
 
         private bool checkIfItsValidPosition(Game game, Position[] blockPositions)
         {
-            for(int block=0; block<blockPositions.Length; block++)
+            for (int block = 0; block < blockPositions.Length; block++)
             {
                 if (!game.board.isBlockFree(blockPositions[block]))
                 {
@@ -150,6 +176,11 @@ namespace TetrisCSharp.GameLogic.Implementation
             }
 
             return true;
+        }
+
+        private bool checkDropTime(Game game)
+        {
+
         }
     }
 }
