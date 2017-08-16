@@ -10,12 +10,16 @@ namespace TetrisCSharp.GameLogic.Implementation
     {
         private bool gameOverFlag;
         private Random rng;
+
         private static readonly byte[] DEFAULT_LINES_FOR_LEVEL = { 0, 5, 10, 20, 40, 60, 80, 100, 120, 140, 160 };
         private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 40, 100, 300, 1200 };
         private const int SCORE_FOR_DROP = 1;
         private const int MULTIPLIER_SCORE_FOR_INSTAFALL = 2;
-        private DateTime lastUpdateTime;
-        private TimeSpan timeFromLastDrop;
+
+        private const long BASE_TICKS_TO_DROP = 10000; //1 sec
+        private const long TICKS_REDUCTION_BY_LEVEL = 400;  //level 20 -> 2000 ticks to drop
+        private DateTime timeToNextDrop;
+
 
         public BasicTetrisLogic()
         {
@@ -32,7 +36,7 @@ namespace TetrisCSharp.GameLogic.Implementation
         {
             game = new Game();
             initializeGame(game);
-            initializeTime();
+            startDropTime(game);
         }
 
         public void Update(Game game, ITetrisControl controller)
@@ -57,13 +61,14 @@ namespace TetrisCSharp.GameLogic.Implementation
             {
                 instafall(game);
                 pieceLanded = true;
+                startDropTime(game);
             }
             else
             {
                 if (controller.isDownPressed())
                 {
                     pieceLanded=dropSpace(game);
-                    
+                    startDropTime(game);
                 }
                 else
                 {
@@ -73,9 +78,9 @@ namespace TetrisCSharp.GameLogic.Implementation
 
             if (pieceLanded)
             {
-                placePiece();
-                checkLines();
-                spawnNewPiece();
+                placePiece(game);
+                checkLines(game);
+                spawnNewPiece(game);
             }
 
         }
@@ -88,12 +93,7 @@ namespace TetrisCSharp.GameLogic.Implementation
             game.level = 1;
             game.toNextLevel = DEFAULT_LINES_FOR_LEVEL[game.level];
         }
-        
-        private void initializeTime()
-        {
-            lastUpdateTime = DateTime.Now;
-            timeFromLastDrop = TimeSpan.Zero;
-        }
+       
 
         private TetrisPieceEnum randomPieceGenerator()
         {
@@ -178,9 +178,32 @@ namespace TetrisCSharp.GameLogic.Implementation
             return true;
         }
 
+        private void startDropTime(Game game)
+        {
+            timeToNextDrop = DateTime.Now + new TimeSpan(BASE_TICKS_TO_DROP-TICKS_REDUCTION_BY_LEVEL*game.level);
+        }
+
         private bool checkDropTime(Game game)
         {
+            if (timeToNextDrop < DateTime.Now)
+            {
+                return dropSpace(game);
 
+            }else
+            {
+                return false;
+            }
+            
+        }
+
+        private void placePiece(Game game)
+        {
+            Position[] blockPositions = game.movingPiece.getBlockPositions();
+
+            for(int blockArrayIndex =0; blockArrayIndex<blockPositions.Length; blockArrayIndex++)
+            {
+                game.board.setBlock(blockPositions[blockArrayIndex], game.movingPiece.getTetrisPieceType());
+            }
         }
     }
 }

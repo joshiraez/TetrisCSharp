@@ -65,7 +65,7 @@ namespace TetrisCSharp.GameStatus
                     rowIterator--;
                 }else
                 {
-                    moveDown(rowIterator);
+                    moveRowsDown(rowIterator);
                     linesCleared++;
                 }
             }
@@ -78,7 +78,7 @@ namespace TetrisCSharp.GameStatus
             board[row] = newBlocks;
         }
 
-        public void moveDown(byte fromRow)
+        public void moveRowsDown(byte fromRow)
         {
             byte rowIterator;
 
@@ -88,7 +88,7 @@ namespace TetrisCSharp.GameStatus
             }
         }
 
-        public void moveUp(byte fromRow = ROW_SIZE - 1)
+        public void moveRowsUp(byte fromRow = ROW_SIZE - 1)
         {
             byte rowIterator;
 

@@ -29,6 +29,11 @@ namespace TetrisCSharp.GameStatus
             return sumToPositionArray(piece.getCurrentRotation(), position + afterMoving);
         }
 
+        public TetrisPieceEnum getTetrisPieceType()
+        {
+            return piece.type;
+        }
+
         public void move(Position move)
         {
             position += move;
