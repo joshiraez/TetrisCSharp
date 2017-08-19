@@ -2,91 +2,115 @@
 using TetrisCSharp.GameLogic.Interface;
 using TetrisCSharp.GameStatus;
 using TetrisCSharp.GameStatus.TetrisPieces;
+using TetrisCSharp.Input.Implementation;
 using TetrisCSharp.Input.Interface;
 
 namespace TetrisCSharp.GameLogic.Implementation
 {
     public class BasicTetrisLogic : ITetrisGameLogic
     {
+        private Game game;
+        private ITetrisControl controller;
+
         private bool gameOverFlag;
         private Random rng;
 
-        private static readonly byte[] DEFAULT_LINES_FOR_LEVEL = { 0, 5, 10, 20, 40, 60, 80, 100, 120, 140, 160 };
+        private static readonly byte[] DEFAULT_LINES_FOR_LEVEL = { 0, 5, 10, 10, 20, 25, 30, 35, 40, 40, 50, 50, 50, 50, 50, 50, 60, 70, 80, 90, 100 };
         private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 40, 100, 300, 1200 };
         private const int SCORE_FOR_DROP = 1;
         private const int MULTIPLIER_SCORE_FOR_INSTAFALL = 2;
+        private const int MAX_SCORE = 9999999;
 
         private const long BASE_TICKS_TO_DROP = 10000; //1 sec
         private const long TICKS_REDUCTION_BY_LEVEL = 400;  //level 20 -> 2000 ticks to drop
         private DateTime timeToNextDrop;
 
 
-        public BasicTetrisLogic()
+        private BasicTetrisLogic()
+        {
+            
+        }
+
+        public BasicTetrisLogic(Game game)
         {
             gameOverFlag = false;
             rng = new Random();
+
+            this.game = game;
+            controller = new KeyboardController();
         }
 
-        public bool HasFinished(Game game)
+        public BasicTetrisLogic(Game game, ITetrisControl controller)
+        {
+            gameOverFlag = false;
+            rng = new Random();
+
+            this.game = game;
+            this.controller = controller;
+        }
+
+
+        public bool HasFinished()
         {
             return gameOverFlag;
         }
 
-        public void Start(Game game)
+        public void Start()
         {
             game = new Game();
-            initializeGame(game);
-            startDropTime(game);
+            initializeGame();
+            startDropTime();
         }
 
-        public void Update(Game game, ITetrisControl controller)
+        public void Update()
         {
             bool pieceLanded;
             
             if (controller.isFirePressed())
             {
-                rotatePiece(game);
+                rotatePiece();
             }
 
             if (controller.isRightPressed())
             {
-                move(game, Position.right);
+                move(Position.right);
             }
             if (controller.isLeftPressed())
             {
-                move(game, Position.left);
+                move(Position.left);
             }
 
             if (controller.isUpPressed())
             {
-                instafall(game);
+                instafall();
                 pieceLanded = true;
-                startDropTime(game);
+                startDropTime();
             }
             else
             {
                 if (controller.isDownPressed())
                 {
-                    pieceLanded=dropSpace(game);
-                    startDropTime(game);
+                    pieceLanded=dropSpace();
+                    startDropTime();
                 }
                 else
                 {
-                    pieceLanded=checkDropTime(game);
+                    pieceLanded=checkDropTime();
                 }
             }
 
             if (pieceLanded)
             {
-                placePiece(game);
-                checkLines(game);
-                spawnNewPiece(game);
+                placePiece();
+                checkLines();
+                spawnNewPiece();
             }
 
         }
 
-        private void initializeGame(Game game)
+        private void initializeGame()
         {
+            gameOverFlag = false;
             game.movingPiece = new ActivePiece(randomPieceGenerator(), game.board.getSpawn());
             game.nextPiece = randomPieceGenerator();
             game.score = 0;
@@ -100,7 +124,7 @@ namespace TetrisCSharp.GameLogic.Implementation
             return (TetrisPieceEnum)rng.Next(1, 7);
         }
 
-        private void rotatePiece(Game game)
+        private void rotatePiece()
         {
             Position[] wallkickingStrategy =
             {
@@ -113,7 +137,7 @@ namespace TetrisCSharp.GameLogic.Implementation
 
             byte wallKickingTry = 0;
 
-            while (!willBeCollisionAfterRotation(game, wallkickingStrategy[wallKickingTry]) && wallKickingTry<wallkickingStrategy.Length)
+            while (!checkWillBeCollisionAfterRotation(wallkickingStrategy[wallKickingTry]) && wallKickingTry<wallkickingStrategy.Length)
             {
                 wallKickingTry++;
             }
@@ -125,25 +149,25 @@ namespace TetrisCSharp.GameLogic.Implementation
             }              
         }
 
-        private void move(Game game, Position moveDirection)
+        private void move(Position moveDirection)
         {
             Position[] peekMoveBlocks = game.movingPiece.getBlockPositions(moveDirection);
 
-            if(checkIfItsValidPosition(game, peekMoveBlocks)){
+            if(checkIfItsValidPosition(peekMoveBlocks)){
                 game.movingPiece.move(moveDirection);
             }
         }
 
-        private void instafall(Game game)
+        private void instafall()
         {
-            while (!dropSpace(game)){}
+            while (!dropSpace()){}
         }
 
-        private bool dropSpace(Game game)
+        private bool dropSpace()
         {
             bool pieceLanded;
 
-            pieceLanded = willBeCollision(game, Position.down);
+            pieceLanded = checkWillBeCollision(Position.down);
 
             if (!pieceLanded)
             {
@@ -153,19 +177,19 @@ namespace TetrisCSharp.GameLogic.Implementation
             return pieceLanded;
         }
 
-        private bool willBeCollisionAfterRotation(Game game, Position afterMoving)
+        private bool checkWillBeCollisionAfterRotation(Position afterMoving)
         {
             Position[] peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(afterMoving);
-            return checkIfItsValidPosition(game, peekRotationBlocks);
+            return checkIfItsValidPosition(peekRotationBlocks);
         }
 
-        private bool willBeCollision(Game game, Position afterMoving)
+        private bool checkWillBeCollision(Position afterMoving)
         {
             Position[] peekBlocks = game.movingPiece.getBlockPositions(afterMoving);
-            return checkIfItsValidPosition(game, peekBlocks);
+            return checkIfItsValidPosition(peekBlocks);
         }
 
-        private bool checkIfItsValidPosition(Game game, Position[] blockPositions)
+        private bool checkIfItsValidPosition(Position[] blockPositions)
         {
             for (int block = 0; block < blockPositions.Length; block++)
             {
@@ -178,16 +202,16 @@ namespace TetrisCSharp.GameLogic.Implementation
             return true;
         }
 
-        private void startDropTime(Game game)
+        private void startDropTime()
         {
             timeToNextDrop = DateTime.Now + new TimeSpan(BASE_TICKS_TO_DROP-TICKS_REDUCTION_BY_LEVEL*game.level);
         }
 
-        private bool checkDropTime(Game game)
+        private bool checkDropTime()
         {
             if (timeToNextDrop < DateTime.Now)
             {
-                return dropSpace(game);
+                return dropSpace();
 
             }else
             {
@@ -196,7 +220,7 @@ namespace TetrisCSharp.GameLogic.Implementation
             
         }
 
-        private void placePiece(Game game)
+        private void placePiece()
         {
             Position[] blockPositions = game.movingPiece.getBlockPositions();
 
@@ -204,6 +228,31 @@ namespace TetrisCSharp.GameLogic.Implementation
             {
                 game.board.setBlock(blockPositions[blockArrayIndex], game.movingPiece.getTetrisPieceType());
             }
+        }
+
+        private void checkLines()
+        {
+            byte linesCleared = game.board.clearLines();
+
+            game.score += Math.Min(linesCleared * DEFAULT_SCORES_FOR_LINES_CLEARED[game.level], MAX_SCORE);
+
+            if (game.level < 20) {
+                game.toNextLevel -= linesCleared;
+                if(game.toNextLevel <= 0)
+                {
+                    game.level++;
+                    game.toNextLevel += DEFAULT_LINES_FOR_LEVEL[game.level];
+                }
+            }
+        }
+
+        private void spawnNewPiece()
+        {
+            game.movingPiece = new ActivePiece(game.nextPiece, game.board.getSpawn());
+
+            game.nextPiece = randomPieceGenerator();
+
+            gameOverFlag = checkWillBeCollision(new Position(0, 0));
         }
     }
 }
