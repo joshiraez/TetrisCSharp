@@ -19,7 +19,7 @@ namespace TetrisCSharp.GameLogic.Implementation
         private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 40, 100, 300, 1200 };
         private const int SCORE_FOR_DROP = 1;
         private const int MULTIPLIER_SCORE_FOR_INSTAFALL = 2;
-        private const int MAX_SCORE = 99999999;
+        private const int MAX_SCORE = 999999999;
 
         private const long BASE_TICKS_TO_DROP = 10000; //1 sec
         private const long TICKS_REDUCTION_BY_LEVEL = 400;  //level 20 -> 2000 ticks to drop

@@ -22,12 +22,32 @@ namespace TetrisCSharp.GameStatus
             }
         }
 
+        public Position getSpawn()
+        {
+            return SPAWN;
+        }
+
+        public byte getHeight()
+        {
+            return ROW_SIZE;
+        }
+
+        public byte getWidth()
+        {
+            return COL_SIZE;
+        }
+
+        public bool isOnBoard(Position pos)
+        {
+            return pos.row >= 0 && pos.row < ROW_SIZE && pos.column >= 0 && pos.column < COL_SIZE;
+        }
+
         public bool isBlockFree(Position pos)
         {
             //We don't care about something going over the board (there is no ceil), so if one piece wants to be over it, it can.
             if (pos.row < ROW_SIZE && pos.column >= 0 && pos.column < COL_SIZE)
             {
-                return board[pos.row][pos.column].type == TetrisPieceEnum.EMPTY;
+                return getBlock(pos).type == TetrisPieceEnum.EMPTY;
             }else
             {
                 return false;
@@ -36,12 +56,19 @@ namespace TetrisCSharp.GameStatus
 
         public void setBlock(Position pos, TetrisPieceEnum type)
         {
-            board[pos.row][pos.column] = new Block(type);
+            if(isOnBoard(pos))
+                board[pos.row][pos.column] = new Block(type);
         }
 
         public Block getBlock(Position pos)
         {
-            return board[pos.row][pos.column];
+            if (isOnBoard(pos))
+            {
+                return board[pos.row][pos.column];
+            }else
+            {
+                return new Block(TetrisPieceEnum.EMPTY);
+            }
         }
 
         public byte clearLines()
@@ -75,7 +102,8 @@ namespace TetrisCSharp.GameStatus
 
         public void addRow(Block[] newBlocks, byte row = ROW_SIZE -1)
         {
-            board[row] = newBlocks;
+            if(row>=0 && row<ROW_SIZE)
+                board[row] = newBlocks;
         }
 
         public void moveRowsDown(byte fromRow)
@@ -101,9 +129,6 @@ namespace TetrisCSharp.GameStatus
             this.addRow(new Block[COL_SIZE], rowIterator);
         }
 
-        public Position getSpawn()
-        {
-            return SPAWN;
-        }
+
     }
 }
