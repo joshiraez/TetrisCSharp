@@ -57,7 +57,6 @@ namespace TetrisCSharp.GameLogic.Implementation
 
         public void Start()
         {
-            game = new Game();
             initializeGame();
             startDropTime();
         }

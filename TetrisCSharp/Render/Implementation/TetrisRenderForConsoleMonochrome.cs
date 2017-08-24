@@ -54,14 +54,14 @@ namespace TetrisCSharp.Render.Implementation
             renderRightColumn();
         }
 
-        public void renderGameBoard()
+        private void renderGameBoard()
         {
             renderBoard();
             renderActivePiece();
             renderBoardToGameRender();
         }
 
-        public void renderRightColumn()
+        private void renderRightColumn()
         {
             renderNextPiece();
             renderScore();
@@ -153,7 +153,7 @@ namespace TetrisCSharp.Render.Implementation
                 { PieceRenderPosibilities.TOP_RIGHT_CORNER_ALONEPIECE,      '┐' },
                 { PieceRenderPosibilities.BOTTOM_LEFT_CORNER_ALONEPIECE,    '└' },
                 { PieceRenderPosibilities.BOTTOM_RIGHT_CORNER_ALONEPIECE,   '└' },
-                { PieceRenderPosibilities.TOP_BETWEEN2PIECES,               '┬' },
+                { PieceRenderPosibilities.BOTTOM_BETWEEN2PIECES,            '┬' },
                 { PieceRenderPosibilities.TOP_BETWEEN2PIECES,               '┴' },
                 { PieceRenderPosibilities.LEFT_BETWEEN2PIECES,              '├' },
                 { PieceRenderPosibilities.RIGHT_BETWEEN2PIECES,             '┤' },

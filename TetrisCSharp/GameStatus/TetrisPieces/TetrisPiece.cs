@@ -9,6 +9,8 @@
         public TetrisPiece(TetrisPieceEnum type)
         {
             rotation = 0;
+            this.type = type;
+            rotations = TetrisPieceRotationData.getRotations(type);
         }
 
         protected byte getNextRotation()
