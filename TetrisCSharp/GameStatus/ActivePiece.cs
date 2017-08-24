@@ -2,7 +2,7 @@
 
 namespace TetrisCSharp.GameStatus
 {
-    public struct ActivePiece
+    public class ActivePiece
     {
         private TetrisPiece piece { get; }
         private Position position;

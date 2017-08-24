@@ -16,7 +16,6 @@ namespace TetrisCSharp.Output.Implementation
 
         public void printImage()
         {
-            Console.Clear();
             for(int row=0; row<gameImage.Length; row++)
             {
                 for(int column=0; column<gameImage[0].Length; column++)
@@ -28,7 +27,7 @@ namespace TetrisCSharp.Output.Implementation
 
         private void printChar(int row, int column, char toPrint)
         {
-            Console.SetCursorPosition(row, column);
+            Console.SetCursorPosition(column, row);
             Console.Write(toPrint);
         }
     }

@@ -179,13 +179,13 @@ namespace TetrisCSharp.GameLogic.Implementation
         private bool checkWillBeCollisionAfterRotation(Position afterMoving)
         {
             Position[] peekRotationBlocks = game.movingPiece.peekNextRotationBlockPosition(afterMoving);
-            return checkIfItsValidPosition(peekRotationBlocks);
+            return !checkIfItsValidPosition(peekRotationBlocks);
         }
 
         private bool checkWillBeCollision(Position afterMoving)
         {
             Position[] peekBlocks = game.movingPiece.getBlockPositions(afterMoving);
-            return checkIfItsValidPosition(peekBlocks);
+            return !checkIfItsValidPosition(peekBlocks);
         }
 
         private bool checkIfItsValidPosition(Position[] blockPositions)

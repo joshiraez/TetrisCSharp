@@ -70,13 +70,14 @@ namespace TetrisCSharp.Render.Implementation
 
         private void renderBoard()
         {
+            createBoardRender();
             Position atPosition;
             for(byte row=0; row<game.board.getHeight(); row++)
             {
                 for(byte column=0; column<game.board.getWidth(); column++)
                 {
                     atPosition = new Position(row, column);
-                    if (game.board.getBlock(atPosition).type == TetrisPieceEnum.EMPTY)
+                    if (game.board.getBlock(atPosition).type != TetrisPieceEnum.EMPTY)
                         renderBlocks(atPosition);
                 }
             }
@@ -106,12 +107,12 @@ namespace TetrisCSharp.Render.Implementation
    
         private enum PieceRenderPosibilities : byte
         {
-            HORIZONTAL_ON_PIECE = 0x9,
+            HORIZONTAL_ON_PIECE = 0xA,
             VERTICAL_ON_PIECE = 0x5,
             TOP_LEFT_CORNER_ALONEPIECE = 0x6, 
             TOP_RIGHT_CORNER_ALONEPIECE = 0xC,
             BOTTOM_LEFT_CORNER_ALONEPIECE = 0x3,
-            BOTTOM_RIGHT_CORNER_ALONEPIECE = 0xA,
+            BOTTOM_RIGHT_CORNER_ALONEPIECE = 0x9,
             TOP_BETWEEN2PIECES = 0xE,
             BOTTOM_BETWEEN2PIECES = 0xB,
             LEFT_BETWEEN2PIECES = 0x7,
@@ -133,14 +134,14 @@ namespace TetrisCSharp.Render.Implementation
             if (originalBoardPosition.row >= 0)
             {
                 boardRender[originalBoardPosition.row][originalBoardPosition.column * 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.TOP_LEFT_CORNER_ALONEPIECE);
-                boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.HORIZONTAL_ON_PIECE);
-                boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.TOP_RIGHT_CORNER_ALONEPIECE);
+                boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1], PieceRenderPosibilities.HORIZONTAL_ON_PIECE);
+                boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 2], PieceRenderPosibilities.TOP_RIGHT_CORNER_ALONEPIECE);
             }
             if (originalBoardPosition.row >= -1)
             {
-                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.BOTTOM_LEFT_CORNER_ALONEPIECE);
-                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.HORIZONTAL_ON_PIECE);
-                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.BOTTOM_RIGHT_CORNER_ALONEPIECE);
+                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2], PieceRenderPosibilities.BOTTOM_LEFT_CORNER_ALONEPIECE);
+                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1], PieceRenderPosibilities.HORIZONTAL_ON_PIECE);
+                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 2] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 2], PieceRenderPosibilities.BOTTOM_RIGHT_CORNER_ALONEPIECE);
             }
         }
 
@@ -152,9 +153,9 @@ namespace TetrisCSharp.Render.Implementation
                 { PieceRenderPosibilities.TOP_LEFT_CORNER_ALONEPIECE,       '┌' },
                 { PieceRenderPosibilities.TOP_RIGHT_CORNER_ALONEPIECE,      '┐' },
                 { PieceRenderPosibilities.BOTTOM_LEFT_CORNER_ALONEPIECE,    '└' },
-                { PieceRenderPosibilities.BOTTOM_RIGHT_CORNER_ALONEPIECE,   '└' },
-                { PieceRenderPosibilities.BOTTOM_BETWEEN2PIECES,            '┬' },
-                { PieceRenderPosibilities.TOP_BETWEEN2PIECES,               '┴' },
+                { PieceRenderPosibilities.BOTTOM_RIGHT_CORNER_ALONEPIECE,   '┘' },
+                { PieceRenderPosibilities.BOTTOM_BETWEEN2PIECES,            '┴' },
+                { PieceRenderPosibilities.TOP_BETWEEN2PIECES,               '┬' },
                 { PieceRenderPosibilities.LEFT_BETWEEN2PIECES,              '├' },
                 { PieceRenderPosibilities.RIGHT_BETWEEN2PIECES,             '┤' },
                 { PieceRenderPosibilities.MIDDLE_BETWEENLOTSPIECES,         '┼' },
