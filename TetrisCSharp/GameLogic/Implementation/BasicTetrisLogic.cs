@@ -136,7 +136,7 @@ namespace TetrisCSharp.GameLogic.Implementation
 
             byte wallKickingTry = 0;
 
-            while (wallKickingTry < wallkickingStrategy.Length && !checkWillBeCollisionAfterRotation(wallkickingStrategy[wallKickingTry]))
+            while (wallKickingTry < wallkickingStrategy.Length && checkWillBeCollisionAfterRotation(wallkickingStrategy[wallKickingTry]))
             {
                 wallKickingTry++;
             }

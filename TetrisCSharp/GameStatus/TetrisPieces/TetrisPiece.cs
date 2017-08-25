@@ -31,7 +31,7 @@
 
         public void doNextRotation()
         {
-            rotation++;
+            rotation = (byte)((rotation + 1) % rotations.Length);
         }
 
         

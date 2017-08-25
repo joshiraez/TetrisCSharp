@@ -15,7 +15,7 @@ namespace TetrisCSharp.Input.Implementation
 
         public bool isLeftPressed()
         {
-            return true;//Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyDown(Key.A);
+            return false;//Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyDown(Key.A);
         }
 
         public bool isRightPressed()
