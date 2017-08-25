@@ -188,15 +188,16 @@ namespace TetrisCSharp.Render.Implementation
             Position pivotPosition = new Position(2, 31);
             char[][] pieceToPrint = nextPiecesRender[game.nextPiece];
 
+            renderImageToGameRender(pivotPosition, nextPiecesRender[TetrisPieceEnum.EMPTY]);
             renderImageToGameRender(pivotPosition, pieceToPrint);
         }
 
         private void renderScore()
         {
             Position pivotPosition = new Position(9, 31);
-            char[] score = string.Format("D9", game.score).ToCharArray();
+            string score = game.score.ToString("D9");
 
-            renderStringToGameRender(pivotPosition, score );
+            renderStringToGameRender(pivotPosition, score);
         }
 
         private void renderLevel()
@@ -220,7 +221,11 @@ namespace TetrisCSharp.Render.Implementation
             {
                 {
                     TetrisPieceEnum.EMPTY,
-                    new char[][] { new char[] { } }
+                    new char[][] {
+                        "         ".ToCharArray(),
+                        "         ".ToCharArray(),
+                        "         ".ToCharArray()
+                    }
                 },
                 {
                     TetrisPieceEnum.GARBAGE,

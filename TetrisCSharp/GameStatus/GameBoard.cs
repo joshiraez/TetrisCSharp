@@ -74,7 +74,7 @@ namespace TetrisCSharp.GameStatus
         public byte clearLines()
         {
             byte linesCleared = 0;
-            byte rowIterator;
+            sbyte rowIterator;
             byte colIterator;
 
             rowIterator = ROW_SIZE -1;
@@ -87,7 +87,7 @@ namespace TetrisCSharp.GameStatus
                     colIterator++;
                 }
 
-                if(colIterator== COL_SIZE)
+                if(colIterator!= COL_SIZE)
                 {
                     rowIterator--;
                 }else
@@ -100,15 +100,15 @@ namespace TetrisCSharp.GameStatus
             return linesCleared;
         }
 
-        public void addRow(Block[] newBlocks, byte row = ROW_SIZE -1)
+        public void addRow(Block[] newBlocks, sbyte row = ROW_SIZE -1)
         {
             if(row>=0 && row<ROW_SIZE)
                 board[row] = newBlocks;
         }
 
-        public void moveRowsDown(byte fromRow)
+        public void moveRowsDown(sbyte fromRow)
         {
-            byte rowIterator;
+            sbyte rowIterator;
 
             for(rowIterator=fromRow; rowIterator>0; rowIterator--)
             {
@@ -116,9 +116,9 @@ namespace TetrisCSharp.GameStatus
             }
         }
 
-        public void moveRowsUp(byte fromRow = ROW_SIZE - 1)
+        public void moveRowsUp(sbyte fromRow = ROW_SIZE - 1)
         {
-            byte rowIterator;
+            sbyte rowIterator;
 
             //We lose one lane if the first row is full. Alas, is a prototype of tetris. We could make it with one extra row in top of it? :P
             for (rowIterator = 0; rowIterator <fromRow; rowIterator++)
@@ -126,7 +126,7 @@ namespace TetrisCSharp.GameStatus
                 board[rowIterator] = board[rowIterator+1];
             }
 
-            this.addRow(new Block[COL_SIZE], rowIterator);
+            addRow(new Block[COL_SIZE], rowIterator);
         }
 
 

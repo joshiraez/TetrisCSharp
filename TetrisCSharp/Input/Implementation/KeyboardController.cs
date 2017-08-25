@@ -15,7 +15,7 @@ namespace TetrisCSharp.Input.Implementation
 
         public bool isLeftPressed()
         {
-            return false;//Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyDown(Key.A);
+            return true;//Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyDown(Key.A);
         }
 
         public bool isRightPressed()
@@ -24,7 +24,7 @@ namespace TetrisCSharp.Input.Implementation
         }
         public bool isFirePressed()
         {
-            return false;//Keyboard.IsKeyDown(Key.Space) || Keyboard.IsKeyDown(Key.E);
+            return true;//Keyboard.IsKeyDown(Key.Space) || Keyboard.IsKeyDown(Key.E);
         }
 
     }

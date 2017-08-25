@@ -21,8 +21,8 @@ namespace TetrisCSharp.GameLogic.Implementation
         private const int MULTIPLIER_SCORE_FOR_INSTAFALL = 2;
         private const int MAX_SCORE = 999999999;
 
-        private const long BASE_TICKS_TO_DROP = 10000; //1 sec
-        private const long TICKS_REDUCTION_BY_LEVEL = 400;  //level 20 -> 2000 ticks to drop
+        private const long BASE_MILLISECONDS_TO_DROP = 1000;
+        private const long MILLISECONDS_REDUCTION_BY_LEVEL = 40;
         private DateTime timeToNextDrop;
 
 
@@ -136,7 +136,7 @@ namespace TetrisCSharp.GameLogic.Implementation
 
             byte wallKickingTry = 0;
 
-            while (!checkWillBeCollisionAfterRotation(wallkickingStrategy[wallKickingTry]) && wallKickingTry<wallkickingStrategy.Length)
+            while (wallKickingTry < wallkickingStrategy.Length && !checkWillBeCollisionAfterRotation(wallkickingStrategy[wallKickingTry]))
             {
                 wallKickingTry++;
             }
@@ -203,16 +203,17 @@ namespace TetrisCSharp.GameLogic.Implementation
 
         private void startDropTime()
         {
-            timeToNextDrop = DateTime.Now + new TimeSpan(BASE_TICKS_TO_DROP-TICKS_REDUCTION_BY_LEVEL*game.level);
+            long milisecondsTimeToNextDrop = BASE_MILLISECONDS_TO_DROP - MILLISECONDS_REDUCTION_BY_LEVEL * game.level;
+            timeToNextDrop = DateTime.Now + new TimeSpan(milisecondsTimeToNextDrop * TimeSpan.TicksPerMillisecond);
         }
 
         private bool checkDropTime()
         {
-            if (timeToNextDrop < DateTime.Now)
-            {
+            if (timeToNextDrop < DateTime.Now) { 
+                startDropTime();
                 return dropSpace();
-
-            }else
+            }
+            else
             {
                 return false;
             }
