@@ -1,8 +1,12 @@
-﻿╔═╦═╦═╗
+╔═╦═╦═╗
 ╚═╬═╬═╝
   ╚═╝etris for C#
 
 Hi! Welcome to this Tetris project in C#
+
+Quick Note! The game is finished!!! Still, there is room for improvement or to make different versions of the layers, implementing other rotations like Sega-type, etc.
+
+You can play the Core Release from here: https://drive.google.com/file/d/0B0EhlrdkYNutRzJmSFNrc3c3SVU/view?usp=sharing (google drive link)
 
 1) Aim
 
@@ -18,7 +22,7 @@ Finally, we have to show the information to the user in a correct way so he can 
 
 
       INPUT      ---\      GAME LOGIC   ---\    GAME STATUS   ---\    "RENDERING"     ---\       OUTPUT
-	(decision)   ---/      (processing) ---/     (result)     ---/    (translation)   ---/   (presentation)
+    (decision)   ---/      (processing) ---/     (result)     ---/    (translation)   ---/   (presentation)
 
 *I use the term rendering because is just like when a PC translates 3D Models (mostly points and vectors) to real images in pixels and colors.
  It's just the translation from a machine state to something understandable for the user
