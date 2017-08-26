@@ -16,7 +16,7 @@ namespace TetrisCSharp.GameLogic.Implementation
         private Random rng;
 
         private static readonly byte[] DEFAULT_LINES_FOR_LEVEL = { 0, 5, 10, 10, 20, 25, 30, 35, 40, 40, 50, 50, 50, 50, 50, 50, 60, 70, 80, 90, 100 };
-        private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 40, 100, 300, 1200 };
+        private static readonly int[] DEFAULT_SCORES_FOR_LINES_CLEARED = { 0, 40, 100, 300, 1200 };
         private const int SCORE_FOR_DROP = 1;
         private const int MULTIPLIER_SCORE_FOR_INSTAFALL = 2;
         private const int MAX_SCORE = 999999999;
@@ -81,9 +81,11 @@ namespace TetrisCSharp.GameLogic.Implementation
 
             if (controller.isUpPressed())
             {
-                instafall();
+                byte linesDropped = instafall();
                 pieceLanded = true;
                 startDropTime();
+                addScore(linesDropped * SCORE_FOR_DROP * 2); 
+
             }
             else
             {
@@ -91,6 +93,7 @@ namespace TetrisCSharp.GameLogic.Implementation
                 {
                     pieceLanded=dropSpace();
                     startDropTime();
+                    addScore(SCORE_FOR_DROP);
                 }
                 else
                 {
@@ -101,7 +104,7 @@ namespace TetrisCSharp.GameLogic.Implementation
             if (pieceLanded)
             {
                 placePiece();
-                checkLines();
+                checkLinesClear();
                 spawnNewPiece();
             }
 
@@ -120,7 +123,7 @@ namespace TetrisCSharp.GameLogic.Implementation
 
         private TetrisPieceEnum randomPieceGenerator()
         {
-            return (TetrisPieceEnum)rng.Next(1, 7);
+            return (TetrisPieceEnum)rng.Next(1, 8);
         }
 
         private void rotatePiece()
@@ -157,9 +160,13 @@ namespace TetrisCSharp.GameLogic.Implementation
             }
         }
 
-        private void instafall()
+        private byte instafall()
         {
-            while (!dropSpace()){}
+            byte lines = 0;
+            while (!dropSpace()){
+                lines++;
+            }
+            return lines;
         }
 
         private bool dropSpace()
@@ -230,19 +237,20 @@ namespace TetrisCSharp.GameLogic.Implementation
             }
         }
 
-        private void checkLines()
+        private void checkLinesClear()
         {
             byte linesCleared = game.board.clearLines();
 
-            game.score += Math.Min(linesCleared * DEFAULT_SCORES_FOR_LINES_CLEARED[game.level], MAX_SCORE);
+            addScore(game.level * DEFAULT_SCORES_FOR_LINES_CLEARED[linesCleared]);
 
-            if (game.level < 20) {
-                game.toNextLevel -= linesCleared;
-                if(game.toNextLevel <= 0)
+            if (game.level < DEFAULT_LINES_FOR_LEVEL.Length) {
+
+                if(game.toNextLevel <= linesCleared)
                 {
                     game.level++;
                     game.toNextLevel += DEFAULT_LINES_FOR_LEVEL[game.level];
                 }
+                game.toNextLevel -= linesCleared;
             }
         }
 
@@ -253,6 +261,11 @@ namespace TetrisCSharp.GameLogic.Implementation
             game.nextPiece = randomPieceGenerator();
 
             gameOverFlag = checkWillBeCollision(new Position(0, 0));
+        }
+
+        private void addScore(int points)
+        {
+            game.score = Math.Min(game.score + points, MAX_SCORE);
         }
     }
 }

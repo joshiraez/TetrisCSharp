@@ -112,7 +112,7 @@ namespace TetrisCSharp.GameStatus
 
             for(rowIterator=fromRow; rowIterator>0; rowIterator--)
             {
-                board[rowIterator] = board[rowIterator-1];
+                board[rowIterator] = (Block[])board[rowIterator-1].Clone();
             }
         }
 
@@ -123,7 +123,7 @@ namespace TetrisCSharp.GameStatus
             //We lose one lane if the first row is full. Alas, is a prototype of tetris. We could make it with one extra row in top of it? :P
             for (rowIterator = 0; rowIterator <fromRow; rowIterator++)
             {
-                board[rowIterator] = board[rowIterator+1];
+                board[rowIterator] = (Block[])board[rowIterator+1].Clone();
             }
 
             addRow(new Block[COL_SIZE], rowIterator);

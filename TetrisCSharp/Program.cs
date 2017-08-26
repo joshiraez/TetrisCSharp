@@ -24,7 +24,7 @@ namespace TetrisCSharp
                 gameRender.render();
                 gameRender.output();
             }
-            Console.ReadLine();
+            Console.ReadKey(true);
 
         }
     }

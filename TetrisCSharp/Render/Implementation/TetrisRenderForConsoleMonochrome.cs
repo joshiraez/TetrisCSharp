@@ -118,6 +118,11 @@ namespace TetrisCSharp.Render.Implementation
             LEFT_BETWEEN2PIECES = 0x7,
             RIGHT_BETWEEN2PIECES = 0xD,
             MIDDLE_BETWEENLOTSPIECES= 0xF,
+
+            HORIZONTAL_ON_BOTTOM_PIECE = 0x1A,
+            HORIZONTAL_ON_TOP_PIECE = 0x2A,
+            HORIZONTAL_ON_MIDDLE_PIECE= 0x3A,
+
             EMPTY = 0x0
         }
 
@@ -134,13 +139,13 @@ namespace TetrisCSharp.Render.Implementation
             if (originalBoardPosition.row >= 0)
             {
                 boardRender[originalBoardPosition.row][originalBoardPosition.column * 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2], PieceRenderPosibilities.TOP_LEFT_CORNER_ALONEPIECE);
-                boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1], PieceRenderPosibilities.HORIZONTAL_ON_PIECE);
+                boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 1], PieceRenderPosibilities.HORIZONTAL_ON_TOP_PIECE);
                 boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 2] = add(boardRender[originalBoardPosition.row][originalBoardPosition.column * 2 + 2], PieceRenderPosibilities.TOP_RIGHT_CORNER_ALONEPIECE);
             }
             if (originalBoardPosition.row >= -1)
             {
                 boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2], PieceRenderPosibilities.BOTTOM_LEFT_CORNER_ALONEPIECE);
-                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1], PieceRenderPosibilities.HORIZONTAL_ON_PIECE);
+                boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 1], PieceRenderPosibilities.HORIZONTAL_ON_BOTTOM_PIECE);
                 boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 2] = add(boardRender[originalBoardPosition.row + 1][originalBoardPosition.column * 2 + 2], PieceRenderPosibilities.BOTTOM_RIGHT_CORNER_ALONEPIECE);
             }
         }
@@ -149,6 +154,9 @@ namespace TetrisCSharp.Render.Implementation
             new Dictionary<PieceRenderPosibilities, char>
             {
                 { PieceRenderPosibilities.HORIZONTAL_ON_PIECE,              '─' },
+                { PieceRenderPosibilities.HORIZONTAL_ON_MIDDLE_PIECE,       '█' },
+                { PieceRenderPosibilities.HORIZONTAL_ON_BOTTOM_PIECE,       '▀' },
+                { PieceRenderPosibilities.HORIZONTAL_ON_TOP_PIECE,          '▄' },
                 { PieceRenderPosibilities.VERTICAL_ON_PIECE,                '│' },
                 { PieceRenderPosibilities.TOP_LEFT_CORNER_ALONEPIECE,       '┌' },
                 { PieceRenderPosibilities.TOP_RIGHT_CORNER_ALONEPIECE,      '┐' },
@@ -211,6 +219,7 @@ namespace TetrisCSharp.Render.Implementation
                 renderImageToGameRender(tensDigitPivotPosition, bigNumberRender[(byte)(game.level / 10)]);
             }
             renderImageToGameRender(unitsDigitPivotPosition, bigNumberRender[(byte)(game.level % 10)]);
+            renderStringToGameRender(nextLevelPivotPosition, "   ");
             renderStringToGameRender(nextLevelPivotPosition, game.toNextLevel.ToString());
         }
 
